@@ -13,16 +13,6 @@ nr_classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
 class Detector:
-    """
-    Create YOLO object detection model in OpenCV with a given config and weights.
-    Use this model to make predictions.
-    
-    Attributes
-        classes (list): list of class names
-        net (obj): openCV network object
-        ln (obj): openCV layer names object
-    """
-    
     def __init__(self, cfg, wts, classes):
         """Initialize detector object
         
@@ -31,14 +21,14 @@ class Detector:
             wts (str): path to model weights file
             classes (list): list of class names
         """
-
         self.classes = classes
         self.net = cv.dnn.readNetFromDarknet(cfg, wts)
         self.net.setPreferableBackend(cv.dnn.DNN_BACKEND_OPENCV)
 
         # determine the output layer
-        self.ln = self.net.getLayerNames()
-        self.ln = [self.ln[i[0] - 1] for i in self.net.getUnconnectedOutLayers()]
+        layer_names = self.net.getLayerNames()
+        self.ln = [layer_names[i - 1] for i in self.net.getUnconnectedOutLayers()]
+
         
     def detect(self, img, conf):
         """

@@ -7,6 +7,7 @@ Data/Validation/
 Data/YOLO/standard/
 Data/YOLO/unused/
 __pycache__/
+live_detection
 
 # Files to ignore
 Data/output.mp4
