@@ -1,4 +1,4 @@
-import Detector
+import detector
 import cv2 as cv
 import numpy as np
 import streamlit as st
@@ -65,13 +65,13 @@ elif mode == 'Imagen':
 
             if button_loc.button('Detectar'):
                 # Obtener predicción de bib
-                output = Detector.get_rbns(img)
+                output = detector.get_rbns(img)
 
                 # Anotar imagen
                 if output is not None:
                     text_loc.text(f"Detectados {len(output)} número(s) de dorsal")
                     for detection in output:
-                        img = Detector.annotate(img, detection, color)
+                        img = detector.annotate(img, detection, color)
                 else:
                     text_loc.text("No se detectaron números de dorsal")
 
@@ -91,11 +91,11 @@ elif mode == 'En Vivo':
                 break
 
             # Realizar la detección en el frame actual
-            output = Detector.get_rbns(frame, single=True)
+            output = detector.get_rbns(frame, single=True)
 
             # Anotar el frame con los resultados de la detección
             if output:
-                frame = Detector.annotate(frame, output[0], color)
+                frame = detector.annotate(frame, output[0], color)
                 st.text(f"Detección exitosa: {output[0][0]}")
                 # Guardar captura
                 cv.imwrite('live_detection/detection_{}.jpg'.format(output[0][0]), frame)
@@ -151,11 +151,11 @@ else:
             if not ret:
                 break
             # Obtener predicción de bib
-            output = Detector.get_rbns(frame, single=True)
+            output = detector.get_rbns(frame, single=True)
 
             # Anotar imagen
             if output is not None:
-                frame = Detector.annotate(frame, output[0], color)
+                frame = detector.annotate(frame, output[0], color)
 
                 if prev_rbn is None or prev_rbn != output[0][0]:
                     rbn_count = 0
