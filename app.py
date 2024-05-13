@@ -111,7 +111,7 @@ elif mode == 'En Vivo':
 
 else:
     if mode == 'Demo':
-        video_path = 'Data/bib_detector_demo.mp4'
+        video_path = './data/bib_detector_demo.mp4'
         video_file = open(video_path, 'rb')
         video_bytes = video_file.read()
 
@@ -141,7 +141,7 @@ else:
         width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
         num_frames = cap.get(cv.CAP_PROP_FRAME_COUNT)
-        vid_out = cv.VideoWriter('Data/output.mp4', fourcc, 25.0, (width,height))
+        vid_out = cv.VideoWriter('./data/output.mp4', fourcc, 25.0, (width,height))
 
         frames_complete = 0
         rank = []
@@ -175,7 +175,7 @@ else:
         vid_out.release()
 
         button_loc.text("Completo. Presiona play para ver el video anotado.")
-        video_file = open('Data/output.mp4', 'rb')
+        video_file = open('./data/output.mp4', 'rb')
         video_bytes = video_file.read()
         video_loc.video(video_bytes)
 

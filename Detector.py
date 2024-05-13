@@ -2,13 +2,13 @@ import cv2 as cv
 import numpy as np
 
 # Bib detection model config
-bd_configPath = 'Data/YOLO/bib_detector/RBNR2_custom-yolov4-tiny-detector.cfg'
-bd_weightsPath = 'Data/YOLO/bib_detector/RBNR2_custom-yolov4-tiny-detector_best.weights'
+bd_configPath = './data/YOLO/bib_detector/RBNR2_custom-yolov4-tiny-detector.cfg'
+bd_weightsPath = './data/YOLO/bib_detector/RBNR2_custom-yolov4-tiny-detector_best.weights'
 bd_classes = ['bib']
 
 # Number reader config
-nr_configPath = 'Data/YOLO/num_reader/SVHN3_custom-yolov4-tiny-detector.cfg'
-nr_weightsPath = 'Data/YOLO/num_reader/SVHN3_custom-yolov4-tiny-detector_best.weights'
+nr_configPath = './data/YOLO/num_reader/SVHN3_custom-yolov4-tiny-detector.cfg'
+nr_weightsPath = './data/YOLO/num_reader/SVHN3_custom-yolov4-tiny-detector_best.weights'
 nr_classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
