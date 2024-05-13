@@ -7,6 +7,9 @@ import tempfile
 import time
 import os
 
+# Configuración de la página
+st.set_page_config(layout="wide", page_icon="./media/logo.png", page_title="Detector de Números de Dorsal")
+
 # Color de la caja de la bib
 color = [252, 15, 192]
 
@@ -23,7 +26,26 @@ mode = st.sidebar.radio(
 )
 
 if mode == 'Inicio':
-    st.text("Página de inicio")
+    st.image('./media/banner.png')
+    col1, col2, col3 = st.columns(3)
+
+    # Uso de st.markdown para renderizar el HTML
+    with col1:
+        st.header("Acerca de")
+        st.write("El proyecto se centra en la aplicación de Redes Neuronales Convolucionales para identificar a corredores mediante el uso de números de dorsal. Utiliza modelos previamente entrenados con YoloV4-tiny, y como aporte adicional, se ha integrado la funcionalidad de detección en tiempo real al proyecto original.")
+    with col2:
+        st.header("Redes neuronales")
+        st.write("Las redes neuronales convolucionales (CNN) son un tipo de red neuronal diseñada para procesar imágenes, reconocer patrones visuales mediante capas de convolución, pooling y capas completamente conectadas, optimizando el análisis y clasificación de imágenes.")
+    with col3:
+        st.header("Equipo")
+        st.image('./media/banner_unl.png')
+        st.write('''
+                - [Diego Fernando Lojan](https://github.com/DiegoFernandoLojanTN)<br>diego.lojan@unl.edu.ec
+                
+                - [Angel Jahir Román](https://github.com/jahirxtrap)<br>angel.roman@unl.edu.ec
+                
+                - [Cecilia Fernanda Trueba](https://github.com/cftr28)<br>cecilia.trueba@unl.edu.ec
+                ''', unsafe_allow_html=True)
 elif mode == 'Imagen':
     # Obtener imagen del usuario
     user_file = st.file_uploader(label='Imagen para analizar:',
@@ -94,7 +116,7 @@ else:
         video_bytes = video_file.read()
 
     elif mode == 'Video':
-        video_bytes = st.file_uploader(label='Video para análisis:',
+        video_bytes = st.file_uploader(label='Video para analizar:',
         type=['mp4'])
         # Usar archivo temporal para OpenCV con video subido por el usuario
         if video_bytes is None:
