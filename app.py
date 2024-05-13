@@ -19,10 +19,12 @@ st.title('Detector de Números de Dorsal')
 st.sidebar.header("Modo")
 mode = st.sidebar.radio(
     'Selecciona el modo',
-    options=['Demo', 'Imagen', 'Video', 'En Vivo']
+    options=['Inicio', 'Demo', 'Imagen', 'Video', 'En Vivo']
 )
 
-if mode == 'Imagen':
+if mode == 'Inicio':
+    st.text("Página de inicio")
+elif mode == 'Imagen':
     # Obtener imagen del usuario
     user_file = st.file_uploader(label='Imagen para analizar:',
         type=['jpg', 'png'])
@@ -92,7 +94,7 @@ else:
         video_bytes = video_file.read()
 
     elif mode == 'Video':
-        video_bytes = st.file_uploader(label='Vídeo para análisis:',
+        video_bytes = st.file_uploader(label='Video para análisis:',
         type=['mp4'])
         # Usar archivo temporal para OpenCV con video subido por el usuario
         if video_bytes is None:
@@ -150,7 +152,7 @@ else:
         cap.release()
         vid_out.release()
 
-        button_loc.text("Completo. Presiona play para ver el vídeo anotado.")
+        button_loc.text("Completo. Presiona play para ver el video anotado.")
         video_file = open('Data/output.mp4', 'rb')
         video_bytes = video_file.read()
         video_loc.video(video_bytes)
