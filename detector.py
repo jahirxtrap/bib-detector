@@ -1,17 +1,6 @@
 import cv2 as cv
 import numpy as np
 
-# Bib detection model config
-bd_configPath = './data/YOLO/bib_detector/RBNR2_custom-yolov4-tiny-detector.cfg'
-bd_weightsPath = './data/YOLO/bib_detector/RBNR2_custom-yolov4-tiny-detector_best.weights'
-bd_classes = ['bib']
-
-# Number reader config
-nr_configPath = './data/YOLO/num_reader/SVHN3_custom-yolov4-tiny-detector.cfg'
-nr_weightsPath = './data/YOLO/num_reader/SVHN3_custom-yolov4-tiny-detector_best.weights'
-nr_classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-
 class detector:
     def __init__(self, cfg, wts, classes):
         """Initialize detector object
@@ -95,7 +84,7 @@ class detector:
         return cls_and_box
 
 
-def get_rbns(img, single=False):
+def get_rbns(img, single=False, model=1):
     """
     Given an image return bib numbers and bib bounding boxes for detected bibs
     
@@ -109,6 +98,20 @@ def get_rbns(img, single=False):
         List of detected bib numbers and corresponding bounding boxes in
         the format [<bib number>, [x, y, width, height]]
     """
+
+    yolo_path = './data/YOLO2/'
+    if model == 2:
+        yolo_path = './data/YOLO/'
+
+    # Configuración del modelo de detección de números dorsales
+    bd_configPath = yolo_path + 'bib_detector/RBNR2_custom-yolov4-tiny-detector.cfg'
+    bd_weightsPath = yolo_path + 'bib_detector/RBNR2_custom-yolov4-tiny-detector_best.weights'
+    bd_classes = ['bib']
+
+    # Number reader config
+    nr_configPath = yolo_path + 'num_reader/SVHN3_custom-yolov4-tiny-detector.cfg'
+    nr_weightsPath = yolo_path + 'num_reader/SVHN3_custom-yolov4-tiny-detector_best.weights'
+    nr_classes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
     # Instantiate detectors
     bd = detector(bd_configPath, bd_weightsPath, bd_classes)

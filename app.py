@@ -19,11 +19,19 @@ if not os.path.exists('./live_detection'):
 
 # Título de la aplicación y modo
 st.title('Detector de Números de Dorsal')
-st.sidebar.header("Modo")
-mode = st.sidebar.radio(
-    'Selecciona el modo',
-    options=['Inicio', 'Demo', 'Imagen', 'Video', 'En Vivo']
-)
+with st.sidebar:
+    # Cambiar modelo
+    st.divider()
+    st.session_state.model = 1
+    if st.selectbox('Seleccionar modelo:', ('Grupo 1', 'Grupo 2')) == "Grupo 2":
+        st.session_state.model = 2
+    st.header("Modo")
+    st.divider()
+    mode = st.radio(
+        'Selecciona el modo',
+        options=['Inicio', 'Demo', 'Imagen', 'Video', 'En Vivo']
+    )
+    st.divider()
 
 if mode == 'Inicio':
     st.image('./media/banner.png')
@@ -31,13 +39,13 @@ if mode == 'Inicio':
 
     # Uso de st.markdown para renderizar el HTML
     with col1:
-        st.header("Acerca de")
+        st.header("Visión general")
         st.write("El proyecto se centra en la aplicación de Redes Neuronales Convolucionales para identificar a corredores mediante el uso de números de dorsal. Utiliza modelos previamente entrenados con YoloV4-tiny, y como aporte adicional, se ha integrado la funcionalidad de detección en tiempo real al proyecto original.")
     with col2:
         st.header("Redes neuronales")
         st.write("Las redes neuronales convolucionales (CNN) son un tipo de red neuronal diseñada para procesar imágenes, reconocer patrones visuales mediante capas de convolución, pooling y capas completamente conectadas, optimizando el análisis y clasificación de imágenes.")
     with col3:
-        st.header("Equipo")
+        st.header("HPCV Grupo 2")
         st.image('./media/banner_unl.png')
         st.write('''
                 - [Diego Fernando Lojan](https://github.com/DiegoFernandoLojanTN)<br>diego.lojan@unl.edu.ec
@@ -61,22 +69,22 @@ elif mode == 'Imagen':
             file_bytes = np.asarray(bytearray(user_file.read()), dtype=np.uint8)
             img = cv.imdecode(file_bytes, 1)
             img_loc = st.empty()
-            img_loc.image(img, channels='BGR')
+            img_loc.image(img, channels='BGR', use_column_width=True)
 
             if button_loc.button('Detectar'):
                 # Obtener predicción de bib
-                output = detector.get_rbns(img)
+                output = detector.get_rbns(img, model=st.session_state.model)
 
                 # Anotar imagen
                 if output is not None:
-                    text_loc.text(f"Detectados {len(output)} número(s) de dorsal")
+                    text_loc.text(f"Se detectaron {len(output)} número(s) de dorsal")
                     for detection in output:
                         img = detector.annotate(img, detection, color)
                 else:
                     text_loc.text("No se detectaron números de dorsal")
 
                 # Mostrar imagen anotada
-                img_loc.image(img, channels='BGR')
+                img_loc.image(img, channels='BGR', use_column_width=True)
 
 elif mode == 'En Vivo':
     run = st.checkbox("Activar cámara")
@@ -91,7 +99,7 @@ elif mode == 'En Vivo':
                 break
 
             # Realizar la detección en el frame actual
-            output = detector.get_rbns(frame, single=True)
+            output = detector.get_rbns(frame, single=True, model=st.session_state.model)
 
             # Anotar el frame con los resultados de la detección
             if output:
@@ -151,7 +159,7 @@ else:
             if not ret:
                 break
             # Obtener predicción de bib
-            output = detector.get_rbns(frame, single=True)
+            output = detector.get_rbns(frame, single=True, model=st.session_state.model)
 
             # Anotar imagen
             if output is not None:
