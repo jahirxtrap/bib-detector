@@ -53,6 +53,7 @@ if mode == 'Inicio':
                 
                 - [Cecilia Fernanda Trueba](https://github.com/cftr28)<br>cecilia.trueba@unl.edu.ec
                 ''', unsafe_allow_html=True)
+
 elif mode == 'Imagen':
     # Obtener imagen del usuario
     user_file = st.file_uploader(label='Imagen para analizar:',
