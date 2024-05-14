@@ -2,7 +2,6 @@ import detector
 import cv2 as cv
 import numpy as np
 import streamlit as st
-import pandas as pd
 import tempfile
 import time
 import os
@@ -15,7 +14,7 @@ color = [252, 15, 192]
 
 # Crear directorio de detección en vivo
 if not os.path.exists('./live_detection'):
-        os.makedirs('./live_detection')
+    os.makedirs('./live_detection')
 
 # Título de la aplicación y modo
 st.title('Detector de Números de Dorsal')
@@ -34,7 +33,7 @@ with st.sidebar:
     st.divider()
 
 if mode == 'Inicio':
-    st.image('./media/banner.png')
+    st.image('./media/banner.png', use_column_width=True)
     col1, col2, col3 = st.columns(3)
 
     # Uso de st.markdown para renderizar el HTML
@@ -57,34 +56,34 @@ if mode == 'Inicio':
 elif mode == 'Imagen':
     # Obtener imagen del usuario
     user_file = st.file_uploader(label='Imagen para analizar:',
-        type=['jpg', 'png'])
+                                 type=['jpg', 'png'])
 
     button_loc = st.empty()
-    
+
     # Mostrar imagen y convertirla para predicción
     if user_file is not None:
-            text_loc = st.empty()
-            text_loc.text('Esta es tu imagen:')
-            # Convertir el archivo a una imagen de OpenCV.
-            file_bytes = np.asarray(bytearray(user_file.read()), dtype=np.uint8)
-            img = cv.imdecode(file_bytes, 1)
-            img_loc = st.empty()
+        text_loc = st.empty()
+        text_loc.text('Esta es tu imagen:')
+        # Convertir el archivo a una imagen de OpenCV.
+        file_bytes = np.asarray(bytearray(user_file.read()), dtype=np.uint8)
+        img = cv.imdecode(file_bytes, 1)
+        img_loc = st.empty()
+        img_loc.image(img, channels='BGR', use_column_width=True)
+
+        if button_loc.button('Detectar'):
+            # Obtener predicción de bib
+            output = detector.get_rbns(img, model=st.session_state.model)
+
+            # Anotar imagen
+            if output is not None:
+                text_loc.text(f"Se detectaron {len(output)} número(s) de dorsal")
+                for detection in output:
+                    img = detector.annotate(img, detection, color)
+            else:
+                text_loc.text("No se detectaron números de dorsal")
+
+            # Mostrar imagen anotada
             img_loc.image(img, channels='BGR', use_column_width=True)
-
-            if button_loc.button('Detectar'):
-                # Obtener predicción de bib
-                output = detector.get_rbns(img, model=st.session_state.model)
-
-                # Anotar imagen
-                if output is not None:
-                    text_loc.text(f"Se detectaron {len(output)} número(s) de dorsal")
-                    for detection in output:
-                        img = detector.annotate(img, detection, color)
-                else:
-                    text_loc.text("No se detectaron números de dorsal")
-
-                # Mostrar imagen anotada
-                img_loc.image(img, channels='BGR', use_column_width=True)
 
 elif mode == 'En Vivo':
     run = st.checkbox("Activar cámara")
@@ -124,8 +123,7 @@ else:
         video_bytes = video_file.read()
 
     elif mode == 'Video':
-        video_bytes = st.file_uploader(label='Video para analizar:',
-        type=['mp4'])
+        video_bytes = st.file_uploader(label='Video para analizar:', type=['mp4'])
         # Usar archivo temporal para OpenCV con video subido por el usuario
         if video_bytes is None:
             st.stop()
@@ -145,11 +143,11 @@ else:
         cap = cv.VideoCapture(video_path)
         cap.set(cv.CAP_PROP_FPS, 25)
         # Establecer especificaciones de salida
-        fourcc = cv.VideoWriter_fourcc('m','p','4','v')
+        fourcc = cv.VideoWriter_fourcc('m', 'p', '4', 'v')
         width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
         num_frames = cap.get(cv.CAP_PROP_FRAME_COUNT)
-        vid_out = cv.VideoWriter('./data/output.mp4', fourcc, 25.0, (width,height))
+        vid_out = cv.VideoWriter('./data/output.mp4', fourcc, 25.0, (width, height))
 
         frames_complete = 0
         rank = []
@@ -170,7 +168,7 @@ else:
                     prev_rbn = output[0][0]
                 else:
                     rbn_count += 1
-                
+
                 if rbn_count >= 25 and prev_rbn not in rank:
                     rank.append(prev_rbn)
 
